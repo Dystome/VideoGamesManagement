@@ -3,45 +3,47 @@ using VideoGamesManagement.DataLayer.Repositories;
 
 namespace VideoGamesManagement.BusinessLayer
 {
-    public class VideoGameService
+    public class VideoGameService : IVideoGameService
     {
+        private readonly IVideoGameRepository _videoGameRepository;
+
+        public VideoGameService(IVideoGameRepository videoGameRepository)
+        {
+            _videoGameRepository = videoGameRepository;
+        }
         public List<VideoGame> GetVideoGames()
         {
-            var gameRepo = new VideoGameRepository();
-            var games = gameRepo.GetAllVideoGame();
+            var games = _videoGameRepository.GetAllVideoGames();
             return games;
         }
 
-       public void AddGame(VideoGame game)
-       {
-            var gameRepo = new VideoGameRepository();
-            gameRepo.AddVideoGame(game);
-       }
+        public void AddGame(VideoGame game)
+        {
+            _videoGameRepository.AddVideoGames(game);
+        }
 
         public void UpdateGame(VideoGame? game)
-        { 
-            var gameRepo = new VideoGameRepository();
+        {
 
-            if (game.Name != "string") 
+            if (game.Name != "string")
             {
                 game.Name = game.Name;
-                gameRepo.UpdateVideoGame(game);
+                _videoGameRepository.UpdateVideoGame(game);
             }
             if (game.Studio != "string")
             {
                 game.Studio = game.Studio;
-                gameRepo.UpdateVideoGame(game);
+                _videoGameRepository.UpdateVideoGame(game);
             }
             if (game.Size != null && game.Size != 0)
             {
                 game.Size = game.Size;
-                gameRepo.UpdateVideoGame(game);
+                _videoGameRepository.UpdateVideoGame(game);
             }
         }
-        public void RemoveGame(VideoGame game) 
+        public void RemoveGame(VideoGame game)
         {
-            var gameRepo = new VideoGameRepository();
-            gameRepo.DeleteVideoGame(game);
+            _videoGameRepository.DeleteVideoGame(game);
         }
 
     }

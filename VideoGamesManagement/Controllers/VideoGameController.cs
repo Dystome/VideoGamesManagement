@@ -8,24 +8,30 @@ namespace VideoGamesManagement.Controllers
 {
     [ApiController]
     [Route("/api/v1.0/[controller]")]
-    public class VideoGameController
+    public class VideoGameController : ControllerBase
     {
         public List<VideoGame> _videoGames = new List<VideoGame>();
 
+        private readonly VideoGameService _videoGameService;
+
+        public VideoGameController(VideoGameService videoGameService)
+        {
+            _videoGameService = videoGameService;
+        }
 
         [HttpGet("allgames")]
         public List<VideoGame> GetAllGames()
         {
-            var videoGameService = new VideoGameService();
-            _videoGames = videoGameService.GetVideoGames().ToList();
+            
+            _videoGames = _videoGameService.GetVideoGames().ToList();
             return _videoGames;
         }
 
         [HttpGet("gamename")]
         public List<VideoGame> GetGameByName([FromQuery] string name)
         {
-            var videoGameService = new VideoGameService();
-            _videoGames = videoGameService.GetVideoGames().Where(p => p.Name.Contains(name))
+          
+            _videoGames = _videoGameService.GetVideoGames().Where(p => p.Name.Contains(name))
                 .ToList();
             return _videoGames;
         }
@@ -33,8 +39,8 @@ namespace VideoGamesManagement.Controllers
         [HttpGet("gameid")]
         public VideoGame GetGameById([FromQuery] int id)
         {
-            var videoGameService = new VideoGameService();
-            _videoGames = videoGameService.GetVideoGames();
+           
+            _videoGames = _videoGameService.GetVideoGames();
             var gameById = _videoGames.Where(p => p.ID == id).FirstOrDefault();
             return gameById;
         }
@@ -43,8 +49,8 @@ namespace VideoGamesManagement.Controllers
 
         public List<VideoGame> GetGameByCompany([FromQuery] string company)
         {
-            var videoGameService = new VideoGameService();
-            _videoGames = videoGameService.GetVideoGames().Where(p => p.Studio.Contains(company))
+            
+            _videoGames = _videoGameService.GetVideoGames().Where(p => p.Studio.Contains(company))
                 .ToList();
             return _videoGames;
         }
@@ -53,8 +59,8 @@ namespace VideoGamesManagement.Controllers
         public IActionResult AddNewGame([FromBody] VideoGame game)
         {
             //Check if game exists
-            var videoGameService = new VideoGameService();
-            _videoGames = videoGameService.GetVideoGames();
+          
+            _videoGames = _videoGameService.GetVideoGames();
             var gameExists = _videoGames.Where(p => p.Name.Equals(game.Name, StringComparison.CurrentCultureIgnoreCase) &&
             p.Studio.Equals(game.Studio, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
@@ -62,8 +68,8 @@ namespace VideoGamesManagement.Controllers
             {
                 throw new Exception("Game already exists!");
             }
-            var gameService = new VideoGameService();
-            gameService.AddGame(game);
+           
+            _videoGameService.AddGame(game);
 
             return new OkObjectResult("Game was added successfully!");
 
@@ -74,8 +80,8 @@ namespace VideoGamesManagement.Controllers
         public IActionResult ModifyGame([FromBody] VideoGame game)
         {
             
-            var gameService = new VideoGameService();
-            _videoGames = gameService.GetVideoGames();
+            
+            _videoGames = _videoGameService.GetVideoGames();
             var gameExists = _videoGames.Where(p => p.ID == game.ID)
                 .FirstOrDefault();
           
@@ -83,7 +89,7 @@ namespace VideoGamesManagement.Controllers
             {
                 throw new Exception("Record does not exist!");
             }
-            gameService.UpdateGame(game);
+            _videoGameService.UpdateGame(game);
 
             return new OkObjectResult("Game successfully updated!");
 
@@ -92,22 +98,24 @@ namespace VideoGamesManagement.Controllers
         [HttpDelete("deletegame")]
         public IActionResult DeleteAnimal([FromBody] VideoGame game)
         {
-            var gameService = new VideoGameService();
+            
             var gameExists = _videoGames.Where(p => p.ID == game.ID)
                 .FirstOrDefault();
             if (game == null)
             {
                 throw new Exception("Record does not exist!");
             }
-            gameService.RemoveGame(game);
+            _videoGameService.RemoveGame(game);
             return new OkObjectResult("Game removed successfully!");
         }
 
         [HttpGet("filter")]
         public List<VideoGame> Filter([FromQuery] string name, [FromQuery] string studio, [FromQuery] int? size)
         {
-            var gameService = new VideoGameService();
-            _videoGames = gameService.GetVideoGames();
+           
+            _videoGames = _videoGame
+                
+                Service.GetVideoGames();
             if (!string.IsNullOrEmpty(name))
             {
                 _videoGames = _videoGames.Where(p => p.Name.Contains(name))

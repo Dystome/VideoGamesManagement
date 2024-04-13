@@ -3,24 +3,28 @@ using VideoGamesManagement.DataLayer.Entities;
 
 namespace VideoGamesManagement.DataLayer.Repositories
 {
-    public class VideoGameRepository
+    public class VideoGameRepository : IVideoGameRepository
     {
         private readonly VideoGamesManagementDBContext _gamesManagementDBContext;
         public VideoGameRepository()
         {
             _gamesManagementDBContext = new VideoGamesManagementDBContext();
         }
-        public void AddVideoGame(VideoGame videoGame)
+
+        // Add VideoGame
+        public void AddVideoGames(VideoGame game)
         {
-            _gamesManagementDBContext.VideoGames.Add(videoGame);
+            _gamesManagementDBContext.VideoGames.Add(game);
             _gamesManagementDBContext.SaveChanges();
         }
+
         // Get All VideoGame
-        public List<VideoGame> GetAllVideoGame()
+        public List<VideoGame> GetAllVideoGames()
         {
             var games = _gamesManagementDBContext.VideoGames.ToList();
             return games;
         }
+
         // Get By ID
         public VideoGame FindByID(int id)
         {
@@ -36,22 +40,8 @@ namespace VideoGamesManagement.DataLayer.Repositories
                 throw ex;
             }
         }
+
         //Update
-        //Remove
-        public void DeleteVideoGame(VideoGame game)
-        {
-            try
-            {
-                _gamesManagementDBContext.VideoGames.Remove(game);
-                _gamesManagementDBContext.SaveChanges();
-                Console.WriteLine("VideoGame removed");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message.ToString());
-                throw ex;
-            }
-        }
         public void UpdateVideoGame(VideoGame game)
         {
 
@@ -68,6 +58,21 @@ namespace VideoGamesManagement.DataLayer.Repositories
             }
         }
 
+        //Remove
+        public void DeleteVideoGame(VideoGame game)
+        {
+            try
+            {
+                _gamesManagementDBContext.VideoGames.Remove(game);
+                _gamesManagementDBContext.SaveChanges();
+                Console.WriteLine("VideoGame removed");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error : " + ex.Message.ToString());
+                throw ex;
+            }
+        }
     }
 }
 
