@@ -62,8 +62,8 @@ namespace VideoGamesManagement.Controllers
             {
                 throw new Exception("Game already exists!");
             }
-            var gameRepo = new VideoGameRepository();
-            gameRepo.AddVideoGame(game);
+            var gameService = new VideoGameService();
+            gameService.AddGame(game);
 
             return new OkObjectResult("Game was added successfully!");
 
@@ -73,16 +73,17 @@ namespace VideoGamesManagement.Controllers
         [HttpPut("modifygame")]
         public IActionResult ModifyGame([FromBody] VideoGame game)
         {
-            var gameRepo = new VideoGameRepository();
+            
+            var gameService = new VideoGameService();
+            _videoGames = gameService.GetVideoGames();
             var gameExists = _videoGames.Where(p => p.ID == game.ID)
                 .FirstOrDefault();
-
+          
             if (game == null)
             {
                 throw new Exception("Record does not exist!");
             }
-
-            gameRepo.UpdateVideoGame(game);
+            gameService.UpdateGame(game);
 
             return new OkObjectResult("Game successfully updated!");
 
@@ -91,14 +92,14 @@ namespace VideoGamesManagement.Controllers
         [HttpDelete("deletegame")]
         public IActionResult DeleteAnimal([FromBody] VideoGame game)
         {
-            var gameRepo = new VideoGameRepository();
+            var gameService = new VideoGameService();
             var gameExists = _videoGames.Where(p => p.ID == game.ID)
                 .FirstOrDefault();
             if (game == null)
             {
                 throw new Exception("Record does not exist!");
             }
-            gameRepo.DeleteVideoGame(game);
+            gameService.RemoveGame(game);
             return new OkObjectResult("Game removed successfully!");
         }
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VideoGamesManagement.DataLayer.DBContext;
+﻿using VideoGamesManagement.DataLayer.DBContext;
 using VideoGamesManagement.DataLayer.Entities;
 
 namespace VideoGamesManagement.DataLayer.Repositories
@@ -55,10 +54,12 @@ namespace VideoGamesManagement.DataLayer.Repositories
         }
         public void UpdateVideoGame(VideoGame game)
         {
+
             try
             {
                 _gamesManagementDBContext.VideoGames.Update(game);
                 _gamesManagementDBContext.SaveChanges();
+
             }
             catch (Exception ex)
             {
